@@ -20,15 +20,21 @@ public class ThreadSafeSingleton {
     }
 
     //add synchronized after static they ensure that only one thread can access a block of code or method at a time
-    public static synchronized ThreadSafeSingleton getThreadSafeInstance(){
+    public static ThreadSafeSingleton getThreadSafeInstance(){
         if ( threadSafeInstance == null){
-            if (delayMe){
-                Thread.currentThread();
-                try {
-                    Thread.sleep(1000);
-                }catch (InterruptedException ie){}
+
+            synchronized(ThreadSafeSingleton.class){
+                if (threadSafeInstance == null) {
+                    if (delayMe){
+                        Thread.currentThread();
+                        try {
+                            Thread.sleep(1000);
+                        }catch (InterruptedException ie){}
+                    }
+                    threadSafeInstance = new ThreadSafeSingleton();
+                }
             }
-            threadSafeInstance = new ThreadSafeSingleton();
+
         }
         return threadSafeInstance;
     }
