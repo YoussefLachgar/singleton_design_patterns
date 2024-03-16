@@ -10,5 +10,17 @@ public class Main {
 
         System.out.println(instance2.hashCode());
         instance2.printData();
+
+        System.out.println("thread safe ex:");
+
+        new DataPrinter().start();
+        new DataPrinter().start();
+    }
+}
+
+class DataPrinter extends Thread {
+    @Override
+    public void run(){
+        ThreadSafeSingleton.getThreadSafeInstance().printData();
     }
 }
