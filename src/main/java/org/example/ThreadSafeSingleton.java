@@ -10,7 +10,7 @@ public class ThreadSafeSingleton {
 
     private List<String> data = Arrays.asList(LETERS);
 
-
+    //add volatile after static they stop the caching of the variable (you can not caching variable)
     private static ThreadSafeSingleton threadSafeInstance;
 
     private static boolean delayMe =  true;
@@ -19,22 +19,15 @@ public class ThreadSafeSingleton {
         Collections.shuffle(data);
     }
 
-    //add synchronized after static they ensure that only one thread can access a block of code or method at a time
     public static ThreadSafeSingleton getThreadSafeInstance(){
         if ( threadSafeInstance == null){
-
-            synchronized(ThreadSafeSingleton.class){
-                if (threadSafeInstance == null) {
-                    if (delayMe){
-                        Thread.currentThread();
-                        try {
-                            Thread.sleep(1000);
-                        }catch (InterruptedException ie){}
-                    }
-                    threadSafeInstance = new ThreadSafeSingleton();
-                }
+            if (delayMe){
+                Thread.currentThread();
+                try {
+                    Thread.sleep(1000);
+                }catch (InterruptedException ie){}
             }
-
+            threadSafeInstance = new ThreadSafeSingleton();
         }
         return threadSafeInstance;
     }
